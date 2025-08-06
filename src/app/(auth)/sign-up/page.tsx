@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { useDebounceCallback, useDebounceValue } from "usehooks-ts";
+import { useDebounceCallback } from "usehooks-ts";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { signUpSchema } from "@/schemas/signUpSchema";
@@ -14,7 +14,6 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -22,6 +21,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Loader2 } from "lucide-react";
+import Link from "next/link";
 
 export default function page() {
   const [username, setUsername] = useState("");
@@ -58,7 +58,6 @@ export default function page() {
           setUsernameMessage(
             axiosError.response?.data.message ?? "Error checking username"
           );
-
         } finally {
           setIsCheckingUsername(false);
         }
@@ -71,6 +70,7 @@ export default function page() {
     setIsSubmitting(true);
 
     try {
+
       const response = await axios.post<ApiResponse>("/api/sign-up", data);
       toast("Success", {
         description: response.data.message,
@@ -92,7 +92,6 @@ export default function page() {
   return (
     <div className="flex justify-center items-center flex-col m-30 ">
       <div className="justify-center items-center rounded-2xl shadow-lg w-vw p-10">
-
         <link
           href="https://fonts.googleapis.com/css2?family=Delius+Unicase&display=swap"
           rel="stylesheet"
@@ -127,7 +126,11 @@ export default function page() {
                         }}
                       />
                     </FormControl>
-                    {isCheckingUsername ? <Loader2 className="animate-spin" /> : ""}
+                    {isCheckingUsername ? (
+                      <Loader2 className="animate-spin" />
+                    ) : (
+                      ""
+                    )}
 
                     <FormMessage />
                   </FormItem>
@@ -165,7 +168,11 @@ export default function page() {
                   </FormItem>
                 )}
               />
-              <Button type="submit" disabled={isSubmitting} className="m-4 flex items-center justify-center">
+              <Button
+                type="submit"
+                disabled={isSubmitting}
+                className="m-4 flex items-center justify-center"
+              >
                 {isSubmitting ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -178,8 +185,12 @@ export default function page() {
             </form>
           </Form>
 
-          {/* If already a user sign-in */}
         </div>
+          {/* If already a user sign-in */}
+        <div className="flex justify-center items-center gap-2">
+            <p>Already a user?</p>
+            <Link href="/sign-in" className="text-blue-900">Sign In</Link>
+          </div>
       </div>
     </div>
   );

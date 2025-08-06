@@ -19,8 +19,8 @@ export const authOptions: NextAuthOptions = {
         try {
           const user = await UserModel.findOne({
             $or: [
-              { email: credentials.indentifier },
-              { user: credentials.indentifier },
+              { email: credentials.identifier },
+              { user: credentials.identifier },
             ],
           });
 
@@ -77,5 +77,5 @@ export const authOptions: NextAuthOptions = {
   session:{
     strategy : "jwt"
   },
-  secret: process.env.NEXTAUTH_SECRET
+  secret: process.env.NEXTAUTH_SECRET || "your-secret-key-here"
 };
