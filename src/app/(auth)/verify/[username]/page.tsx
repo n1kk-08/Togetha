@@ -4,7 +4,6 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -39,7 +38,7 @@ export default function Verify() {
       });
 
       toast("Success", { description: response.data.message });
-      router.replace(`/sign-in`);
+      router.replace(`/dashboard`);
     } catch (error) {
       console.error("Error verifying user", error);
 

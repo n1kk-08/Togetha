@@ -72,7 +72,7 @@ function MessageCard({ message, onMessageDelete }: MessageCardProps) {
               </AlertDialogFooter>
             </AlertDialogContent>
           </AlertDialog>
-          <CardDescription>Card Description</CardDescription>
+          <CardDescription>{message.content}</CardDescription>
           <CardAction>Card Action</CardAction>
         </CardHeader>
         <CardContent>

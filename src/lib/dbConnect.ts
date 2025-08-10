@@ -13,13 +13,16 @@ async function dbConnect() : Promise<void> {
     }
 
     try {
-        const db = await mongoose.connect(process.env.MONGODB_URI || "")
+        const db = await mongoose.connect(process.env.MONGODB_URI || "", {
+            serverSelectionTimeoutMS: 5000, // Timeout after 5s instead of 30s
+            socketTimeoutMS: 45000, // Close sockets after 45s of inactivity
+        })
         connection.isConnected = db.connections[0].readyState
 
         console.log("DB connected")
     } catch (error) {
-        console.log("DB connection failed", error)
-        process.exit(1)
+        console.error("DB connection failed", error)
+        throw error 
     }
 }
 

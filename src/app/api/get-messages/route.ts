@@ -1,7 +1,6 @@
 import dbConnect from "@/lib/dbConnect";
 import { authOptions } from "../auth/[...nextauth]/options";
 import UserModel from "@/model/User";
-import { User } from "next-auth";
 import { getServerSession } from "next-auth";
 import mongoose from "mongoose";
 
@@ -23,22 +22,22 @@ export async function GET(request: Request) {
   const userId = new mongoose.Types.ObjectId(session.user._id);
 
   try {
-    const user = await UserModel.aggregate([
-      { $match: { _id: userId } },
-      // { $unwind: "$messages" },
-      { $unwind: { path: "$messages", preserveNullAndEmptyArrays: true }  },
-      { $sort: { "messages.createdAt": -1 } },
-      { $group: { _id: "$_id", messages: { $push: "$messages" } } },
-    ]);
+    // const user = await UserModel.aggregate([
+    //   { $match: { _id: userId } },
+    //   { $unwind: "$messages" },
+    //   // { $unwind: { path: "$messages", preserveNullAndEmptyArrays: true }  },
+    //   { $sort: { "messages.createdAt": -1 } },
+    //   { $group: { _id: "$_id", messages: { $push: "$messages" } } },
+    // ]);
     
-    console.log("Aggregate result:", user);
+    const user = await UserModel.findById(userId);
+
 
     if (!user) {
-      // console.log("Yay this is the error")
       return Response.json(
         {
           success: false,
-          message: "User not found here",
+          message: "User not found",
         },
         { status: 404 }
       );
@@ -46,7 +45,7 @@ export async function GET(request: Request) {
       return Response.json(
         {
           success: true,
-          message: user[0].messages,
+          messages: user?.messages || [],
         },
         { status: 200 }
       );

@@ -8,7 +8,10 @@ import { AcceptMessageSchema } from '@/schemas/acceptMessageSchema'
 import axios, { AxiosError } from 'axios'
 import { ApiResponse } from '@/types/ApiResponse'
 import { toast } from 'sonner'
-import { User } from 'next-auth'
+import { Switch } from '@/components/ui/switch'
+import { Button } from '@/components/ui/button'
+import MessageCard from '@/components/MessageCard'
+
 
 function page() {
 
@@ -16,14 +19,30 @@ function page() {
   const [isLoading, setIsLoading] = useState(false)
   const [isSwitchLoading, setIsSwitchLoading] = useState(false)
 
-  const handleDeleteMessage = (messageId: string) => {
-    setMessages(messages.filter((message) => 
-      message._id !== messageId
-    ))
+  const handleDeleteMessage = async (messageId: string) => {
+    try {
+      const response = await axios.delete<ApiResponse>(`/api/delete-message/${messageId}`)
+      
+      if (response.data.success) {
+        // Remove from local state only after successful API call
+        setMessages(messages.filter((message) => 
+          message._id !== messageId
+        ))
+        toast("Message deleted successfully")
+      } else {
+        toast("Error1", { description: response.data.message || "Failed to delete message" })
+      }
+    } catch (error) {
+      const axiosError = error as AxiosError<ApiResponse>
+      toast("Error2", { 
+        description: axiosError.response?.data.message || "Failed to delete message" 
+      })
+    }
   } 
 
-  // const {data : session} = useSession()
-  const {data:session} = useSession()
+  const {data : session} = useSession()
+  console.log("Session data:", session)
+
 
   const form = useForm({
     resolver: zodResolver(AcceptMessageSchema)
@@ -49,15 +68,15 @@ function page() {
     } finally{
       setIsSwitchLoading(false)
     }
+  }, [])
 
-  }, [setValue])
-
-  const fetchMessages = useCallback( async (refresh: boolean = false) => {
+  const fetchMessages = useCallback(async (refresh: boolean = false) => {
     setIsLoading(true)
     setIsSwitchLoading(false)
 
     try {
       const response = await axios.get<ApiResponse>("/api/get-messages")
+      console.log("API Response:", response.data)
       setMessages(response.data.messages || [])
 
       if(refresh){
@@ -74,7 +93,8 @@ function page() {
       setIsSwitchLoading(false)
     }
 
-  },[setIsLoading, setMessages])
+  // },[setIsLoading, setMessages])
+  },[])
 
   useEffect(() => {
     if(!session || !session.user){
@@ -82,8 +102,9 @@ function page() {
     }
     fetchMessages()
     fetchAcceptMesssage()
+  }, [session, fetchMessages, fetchAcceptMesssage])
 
-  }, [session, setValue, fetchAcceptMesssage, fetchMessages])
+  console.log("messages", messages)
 
   const handleSwitchChange = async () =>{
     try {
@@ -103,7 +124,6 @@ function page() {
       )
     }
   }
-  console.log("Session",session?.user)
 
   // Safely extract username with proper null checking
   const username = session?.user?.username  || ''
@@ -157,12 +177,9 @@ function page() {
               readOnly 
               className="flex-1 p-2 border border-gray-300 rounded-md bg-gray-50"
             />
-            <button 
-              onClick={copyToClipboard}
-              className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
-            >
-              Copy
-            </button>
+            
+            <Button onClick={copyToClipboard}>Copy</Button>
+            
           </div>
         </div>
 
@@ -173,7 +190,7 @@ function page() {
               <h3 className="text-lg font-semibold">Accept Messages</h3>
               <p className="text-gray-600 text-sm">Allow others to send you messages</p>
             </div>
-            <button 
+            {/* <button 
               onClick={handleSwitchChange}
               disabled={isSwitchLoading}
               className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
@@ -183,7 +200,14 @@ function page() {
               <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
                 acceptMessages ? 'translate-x-6' : 'translate-x-1'
               }`} />
-            </button>
+            </button> */}
+            <Switch 
+            {...register('acceptMessages')}
+            checked={acceptMessages}
+            onCheckedChange={handleSwitchChange}
+            disabled={isSwitchLoading}
+            />
+            
           </div>
         </div>
 
@@ -194,7 +218,7 @@ function page() {
             <button 
               onClick={() => fetchMessages(true)}
               disabled={isLoading}
-              className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition-colors disabled:opacity-50"
+              className="px-4 py-2 bg-blue-950 text-white rounded-md hover:bg-green-600 transition-colors disabled:opacity-50"
             >
               {isLoading ? 'Loading...' : 'Refresh'}
             </button>
@@ -204,8 +228,9 @@ function page() {
             <p className="text-gray-500 text-center py-8">No messages yet. Share your profile URL to receive messages!</p>
           ) : (
             <div className="space-y-4">
-              {messages.map((message) => (
-                <div key={message._id?.toString()} className="border border-gray-200 rounded-lg p-4">
+              {messages.map((message, index) => (
+                
+                <div key={index} className="border border-gray-200 rounded-lg p-4">
                   <p className="text-gray-800">{message.content}</p>
                   <p className="text-sm text-gray-500 mt-2">
                     {new Date(message.createdAt).toLocaleDateString()}
@@ -217,6 +242,9 @@ function page() {
                     Delete
                   </button>
                 </div>
+                // <MessageCard
+                // message={message}
+                // onMessageDelete={handleDeleteMessage}/>
               ))}
             </div>
           )}

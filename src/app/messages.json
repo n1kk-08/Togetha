@@ -1,0 +1,28 @@
+[
+    {
+        "title": "Mom",
+        "content" : "Hey Nikhil!",
+        "received": "10 sec ago"
+    },
+    {
+        "title": "Dad",
+        "content" : "Hello Nik",
+        "received": "100000 sec ago"
+    },
+    {
+        "title": "Friend1",
+        "content" : "Hii.. Nikhil!",
+        "received": "59 sec ago"
+    },
+    {
+        "title": "Friend2",
+        "content" : "What is up",
+        "received": "59 sec ago"
+    },
+    {
+        "title": "Friend3",
+        "content" : "Whats going on brotha",
+        "received": "59 sec ago"
+    }
+
+]
