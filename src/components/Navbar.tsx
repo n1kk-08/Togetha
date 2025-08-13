@@ -15,7 +15,7 @@ export default function Navbar() {
 
   return (
     <nav>
-        <div className='flex flex-wrap items-center justify-between p-4 gap-2'>
+        <div className='bg-gray-100 shadow-lg flex flex-wrap items-center justify-between p-4 gap-2'>
             <link
           href="https://fonts.googleapis.com/css2?family=Delius+Unicase&display=swap"
           rel="stylesheet"
@@ -24,12 +24,12 @@ export default function Navbar() {
             {
                 session ? (
                     <>
-                    <span className=''>Welcome, <span className='capitalize'>{user?.username || user?.email}</span>
+                    <span className='font-semibold'>Welcome, <span className='capitalize'>{user?.username || user?.email}</span>
                     </span>
                     </>
                 ) : (<></>)
             }
-            <a href="#" style={{fontFamily: "Delius Unicase"}} className='font-extrabold'>Togetha</a>
+            <a href="/" style={{fontFamily: "Delius Unicase"}} className='font-extrabold'>Togetha</a>
 
             {
                 session ? (<><Button onClick={() => signOut()} className=''>Sign Out</Button>

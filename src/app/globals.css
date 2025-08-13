@@ -120,3 +120,17 @@
     @apply bg-background text-foreground;
   }
 }
+
+.gif{
+  background-image: url("/bg.gif");
+  background-repeat: no-repeat;
+}
+
+.background2{
+  background-image: url("/bg-2.png");
+}
+.background3{
+  background-image: url("/bg-3.gif");
+  background-repeat: no-repeat;
+  background-size: cover;
+}

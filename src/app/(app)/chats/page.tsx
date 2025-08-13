@@ -163,14 +163,14 @@ function page() {
   }
 
   return (
-    <div className='bg-gray-200 min-h-screen p-6'>
+    <div className='min-h-screen p-6 background3'>
       <div className="max-w-4xl mx-auto">
-        <h2 className='text-3xl font-bold text-black mb-6'>Messages</h2>
+        <h2 className='text-3xl font-bold text-white mb-6'>Messages</h2>
         
 
-        <div className="bg-white rounded-lg p-6 mb-6 shadow-sm">
+        <div className="rounded-lg p-6 mb-6 shadow-s backdrop-blur-sm bg-white/15 text-white">
           <h3 className="text-lg font-semibold mb-4">Your Profile URL</h3>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 text-black">
             <input 
               type="text" 
               value={profileUrl} 
@@ -184,11 +184,11 @@ function page() {
         </div>
 
 
-        <div className="bg-white rounded-lg p-6 mb-6 shadow-sm">
+        <div className="backdrop-blur-sm bg-white/15 rounded-lg p-6 mb-6 shadow-sm text-white">
           <div className="flex items-center justify-between">
             <div>
               <h3 className="text-lg font-semibold">Accept Messages</h3>
-              <p className="text-gray-600 text-sm">Allow others to send you messages</p>
+              <p className="text-gray-200 text-sm">Allow others to send you messages</p>
             </div>
             {/* <button 
               onClick={handleSwitchChange}
@@ -212,13 +212,13 @@ function page() {
         </div>
 
 
-        <div className="bg-white rounded-lg p-6 shadow-sm">
+        <div className="rounded-lg p-6 shadow-sm backdrop-blur-sm bg-white/15">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold">Your Messages</h3>
+            <h3 className="text-lg font-semibold text-white">Your Messages</h3>
             <button 
               onClick={() => fetchMessages(true)}
               disabled={isLoading}
-              className="px-4 py-2 bg-blue-950 text-white rounded-md hover:bg-green-600 transition-colors disabled:opacity-50"
+              className="px-4 py-2 bg-blue-950 text-white rounded-md hover:bg-blue-900 transition-colors disabled:opacity-50"
             >
               {isLoading ? 'Loading...' : 'Refresh'}
             </button>
@@ -230,21 +230,22 @@ function page() {
             <div className="space-y-4">
               {messages.map((message, index) => (
                 
-                <div key={index} className="border border-gray-200 rounded-lg p-4">
-                  <p className="text-gray-800">{message.content}</p>
-                  <p className="text-sm text-gray-500 mt-2">
-                    {new Date(message.createdAt).toLocaleDateString()}
-                  </p>
-                  <button 
-                    onClick={() => handleDeleteMessage(message._id?.toString() || '')}
-                    className="mt-2 text-red-500 hover:text-red-700 text-sm"
-                  >
-                    Delete
-                  </button>
-                </div>
-                // <MessageCard
-                // message={message}
-                // onMessageDelete={handleDeleteMessage}/>
+                // <div key={index} className="border border-gray-200 rounded-lg p-4">
+                //   <p className="text-gray-800">{message.content}</p>
+                //   <p className="text-sm text-gray-500 mt-2">
+                //     {new Date(message.createdAt).toLocaleDateString()}
+                //   </p>
+                //   <button 
+                //     onClick={() => handleDeleteMessage(message._id?.toString() || '')}
+                //     className="mt-2 text-red-500 hover:text-red-700 text-sm"
+                //   >
+                //     Delete
+                //   </button>
+                // </div>
+                <MessageCard
+                key={index}
+                message={message}
+                onMessageDelete={handleDeleteMessage}/>
               ))}
             </div>
           )}

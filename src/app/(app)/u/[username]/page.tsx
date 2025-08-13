@@ -16,6 +16,7 @@ import {
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { messageSchema } from "@/schemas/messageSchema";
+import { useCompletion } from '@ai-sdk/react'
 
 export default function page() {
   const params = useParams();
@@ -85,6 +86,8 @@ export default function page() {
             </form>
           </Form>
         </div>
+      </div>
+      <div>
       </div>
     </>
   );

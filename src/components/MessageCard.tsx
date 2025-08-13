@@ -47,21 +47,25 @@ function MessageCard({ message, onMessageDelete }: MessageCardProps) {
 
   return (
     <div>
-      <Card>
+      <Card className="flex flex-row justify-between items-center">
         <CardHeader>
-          <CardTitle>Card Title</CardTitle>
-          <AlertDialog>
+          <CardTitle className="text-nowrap">{message.content}</CardTitle>
+          
+        </CardHeader>
+        <CardContent>
+          <p>{message.createdAt instanceof Date ? message.createdAt.toLocaleString() : new Date(message.createdAt).toLocaleString()}</p>
+        </CardContent>
+        <AlertDialog>
             <AlertDialogTrigger asChild>
-              <Button variant="destructive">
-                <X className="w-5 h-5" />
+              <Button className="bg-white text-red-500 border-2 border-red-500 w-fit hover:bg-red-100 mr-2">
+                Delete
               </Button>
             </AlertDialogTrigger>
             <AlertDialogContent>
               <AlertDialogHeader>
                 <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                 <AlertDialogDescription>
-                  This action cannot be undone. This will permanently delete
-                  your account and remove your data from our servers.
+                  This action cannot be undone. Are you sure to completely delete this message
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
@@ -72,12 +76,6 @@ function MessageCard({ message, onMessageDelete }: MessageCardProps) {
               </AlertDialogFooter>
             </AlertDialogContent>
           </AlertDialog>
-          <CardDescription>{message.content}</CardDescription>
-          <CardAction>Card Action</CardAction>
-        </CardHeader>
-        <CardContent>
-          <p>Card Content</p>
-        </CardContent>
       </Card>
     </div>
   );
