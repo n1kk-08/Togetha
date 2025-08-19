@@ -38,7 +38,7 @@ export default function Verify() {
       });
 
       toast("Success", { description: response.data.message });
-      router.replace(`/dashboard`);
+      router.replace(`/chats`);
     } catch (error) {
       console.error("Error verifying user", error);
 

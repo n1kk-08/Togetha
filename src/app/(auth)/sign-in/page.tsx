@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -50,7 +50,7 @@ export default function page() {
     }
     if (result?.url) {
       toast("Login Successful");
-      router.replace("/dashboard");
+      router.replace("/chats");
     }
   };
 

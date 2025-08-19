@@ -17,6 +17,9 @@ import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { messageSchema } from "@/schemas/messageSchema";
 import { useCompletion } from '@ai-sdk/react'
+import { useEffect, useState } from "react";
+import { UIMessage } from "ai";
+
 
 export default function page() {
   const params = useParams();
@@ -56,39 +59,57 @@ export default function page() {
     }
   };
 
-  return (
-    <>
-      <div className="text-center">
-        <h1>Sending message to @{username}</h1>
-        <div className="m-2 md:m-5 lg:mx-30 p-4">
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(sendMessage)}>
-              <FormField
-                control={form.control}
-                name="content"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Input
-                        className="p-10"
-                        placeholder="Type your message"
-                        {...field}
-                      />
-                    </FormControl>
+  const getSuggestedMessages = async () => {
+    try {
+      const response = await axios.post("/api/suggested-messages");
+      console.log("Response", response)
+      console.log("Response Data", response.data)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      getSuggestedMessages();
+    }, 2000); // wait 2s
+  
+    return () => clearTimeout(timer);
+  }, []);
 
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <Button className="m-4" type="submit">
-                Send
-              </Button>
-            </form>
-          </Form>
-        </div>
+  return(
+  <>
+    <div className="text-center">
+      <h1>Sending message to @{username}</h1>
+      <div className="m-2 md:m-5 lg:mx-30 p-4">
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(sendMessage)}>
+            <FormField
+              control={form.control}
+              name="content"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Input
+                      className="p-10"
+                      placeholder="Type your message"
+                      {...field}
+                    />
+                  </FormControl>
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <Button className="m-4" type="submit">
+              Send
+            </Button>
+          </form>
+        </Form>
       </div>
-      <div>
-      </div>
-    </>
-  );
+    </div>
+    <div>
+    </div>
+  </>
+  )
+
 }

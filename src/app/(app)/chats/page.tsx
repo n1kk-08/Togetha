@@ -190,17 +190,7 @@ function page() {
               <h3 className="text-lg font-semibold">Accept Messages</h3>
               <p className="text-gray-200 text-sm">Allow others to send you messages</p>
             </div>
-            {/* <button 
-              onClick={handleSwitchChange}
-              disabled={isSwitchLoading}
-              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                acceptMessages ? 'bg-blue-500' : 'bg-gray-300'
-              }`}
-            >
-              <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                acceptMessages ? 'translate-x-6' : 'translate-x-1'
-              }`} />
-            </button> */}
+            
             <Switch 
             {...register('acceptMessages')}
             checked={acceptMessages}
@@ -230,18 +220,6 @@ function page() {
             <div className="space-y-4">
               {messages.map((message, index) => (
                 
-                // <div key={index} className="border border-gray-200 rounded-lg p-4">
-                //   <p className="text-gray-800">{message.content}</p>
-                //   <p className="text-sm text-gray-500 mt-2">
-                //     {new Date(message.createdAt).toLocaleDateString()}
-                //   </p>
-                //   <button 
-                //     onClick={() => handleDeleteMessage(message._id?.toString() || '')}
-                //     className="mt-2 text-red-500 hover:text-red-700 text-sm"
-                //   >
-                //     Delete
-                //   </button>
-                // </div>
                 <MessageCard
                 key={index}
                 message={message}
