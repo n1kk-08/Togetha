@@ -10,7 +10,9 @@
   },
   "dependencies": {
     "@ai-sdk/openai": "^2.0.0",
+    "@ai-sdk/perplexity": "^2.0.3",
     "@ai-sdk/react": "^2.0.0",
+    "@google/genai": "^1.16.0",
     "@hookform/resolvers": "^5.2.1",
     "@radix-ui/react-alert-dialog": "^1.1.14",
     "@radix-ui/react-avatar": "^1.1.10",
@@ -26,6 +28,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "embla-carousel-react": "^8.6.0",
+    "genai": "^0.0.18",
     "lucide-react": "^0.536.0",
     "mongoose": "^8.16.5",
     "next": "15.4.4",

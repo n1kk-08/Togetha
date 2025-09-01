@@ -8,23 +8,39 @@ export async function POST(request: Request) {
   await dbConnect();
 
   try {
-    const { username, email, password } = await request.json();
+    const body = await request.json();
+    console.log("Signup request body:", body);
+    
+    const { username, email, password } = body;
+    
+    // Validate required fields
+    if (!username || !email || !password) {
+      console.log("Missing required fields:", { username: !!username, email: !!email, password: !!password });
+      return Response.json(
+        { success: false, message: "Missing required fields" },
+        { status: 400 }
+      );
+    }
 
+    console.log("Checking for existing verified user with username:", username);
     const existingUserVerifiedByUsername = await UserModel.findOne({
       username,
       isVerified: true,
     });
 
     if (existingUserVerifiedByUsername) {
+      console.log("Username already taken by verified user:", username);
       return Response.json(
         { success: false, message: "Username already taken" },
         { status: 400 }
       );
     }
+    console.log("Checking for existing user with email:", email);
     const existingUserByEmail = await UserModel.findOne({ email });
 
-    // const verifyCode = Math.floor(100000 + Math.random() * 900000).toString();
-    const verifyCode : string = "000000";
+    const verifyCode = Math.floor(100000 + Math.random() * 900000).toString();
+    console.log("Generated verification code:", verifyCode);
+    // const verifyCode : string = "000000";
 
     if (existingUserByEmail) {
       if (existingUserByEmail.isVerified) {

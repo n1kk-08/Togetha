@@ -1,39 +1,36 @@
-import { openai } from "@ai-sdk/openai";
 import { streamText, UIMessage, convertToModelMessages } from "ai";
-import OpenAI from "openai";
-
+import { GoogleGenAI } from "@google/genai";
 
 export const maxDuration = 30;
 
 export async function POST(req: Request) {
   try {
     const prompt =
-      "Create a list of three open-ended and engaging questions formatted as a single string. Each question should be separated by '||'. These questions are for an anonymous social messaging platform, like Qooh.me, and should be suitable for a diverse audience. Avoid personal or sensitive topics, focusing instead on universal themes that encourage friendly interaction. For example, your output should be structured like this: 'What's a hobby you've recently started?| |If you could have dinner with any historical figure, who would it be? || What's a simple thing that makes you happy?'. Ensure the questions are intriguing, foster curiosity, and contribute to a positive and welcoming conversational environment.";
+      "Create a list of three open-ended and engaging questions formatted as a single string. Each question should be separated by '||'. These questions are for an anonymous social messaging platform, like Qooh.me, and should be suitable for a diverse audience. Avoid personal or sensitive topics, focusing instead on universal themes that encourage friendly interaction. For example, your output should be structured like this: 'What's a hobby you've recently started?||If you could have dinner with any historical figure, who would it be? || What's a simple thing that makes you happy?'. Ensure the questions are intriguing, foster curiosity, and contribute to a positive and welcoming conversational environment.";
 
-    const { messages }: { messages: UIMessage[] } = await req.json();
+    
 
-    const result = streamText({
-      model: openai("gpt-4o"),
-      prompt,
-      messages: convertToModelMessages(messages),
+    const ai = new GoogleGenAI({});
+
+    const response = await ai.models.generateContent({
+      model: "gemini-2.5-flash",
+      contents: prompt,
     });
 
-    return result.toUIMessageStreamResponse();
+    console.log("APi response ",response.text);
+    return Response.json({
+      success: true,
+      message: response.text,
+    }, {status: 200}
+    )
+
   } catch (error) {
-    if (error instanceof OpenAI.APIError) {
-      const { name, status, headers, message } = error;
-      return Response.json(
-        {
-          name,
-          status,
-          headers,
-          message,
-        },
-        { status }
-      );
-    } else {
-      console.log("Unexpected error", error);
-      throw error;
-    }
+    return Response.json(
+      {
+        success: false,
+        message: "Error generating suggested messages",
+      },
+      { status: 500 }
+    );
   }
 }
