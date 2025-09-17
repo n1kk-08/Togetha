@@ -47,17 +47,22 @@ function MessageCard({ message, onMessageDelete }: MessageCardProps) {
 
   return (
     <div>
+
       <Card className="flex flex-row justify-between items-center">
-        <CardHeader>
+
+
+        <CardHeader  className="flex flex-col justify-start">
           <CardTitle className="text-nowrap">{message.content}</CardTitle>
           
+        <CardDescription>
+        {message.createdAt instanceof Date ? message.createdAt.toLocaleString() : new Date(message.createdAt).toLocaleString()}
+        </CardDescription>
         </CardHeader>
-        <CardContent>
-          <p>{message.createdAt instanceof Date ? message.createdAt.toLocaleString() : new Date(message.createdAt).toLocaleString()}</p>
-        </CardContent>
+
+
         <AlertDialog>
             <AlertDialogTrigger asChild>
-              <Button className="bg-white text-red-500 border-2 border-red-500 w-fit hover:bg-red-100 mr-2">
+              <Button className="bg-white text-red-700 border-2 border-gray-200 w-fit hover:bg-gray-100 mr-2">
                 Delete
               </Button>
             </AlertDialogTrigger>
